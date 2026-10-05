@@ -145,6 +145,39 @@
   });
 })();
 
+(function mobileMenu() {
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const menu = document.querySelector("[data-mobile-menu]");
+  if (!toggle || !menu) return;
+
+  const close = () => {
+    toggle.setAttribute("aria-expanded", "false");
+    menu.classList.remove("is-open");
+    menu.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  const open = () => {
+    toggle.setAttribute("aria-expanded", "true");
+    menu.classList.add("is-open");
+    menu.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  toggle.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    isOpen ? close() : open();
+  });
+
+  menu.querySelectorAll("[data-mobile-link]").forEach((link) => {
+    link.addEventListener("click", close);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 720) close();
+  });
+})();
+
 (function floatingWhatsapp() {
   const btn = document.querySelector("[data-whatsapp-float]");
   const hero = document.querySelector("[data-hero-scroller]");

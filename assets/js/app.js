@@ -6,7 +6,7 @@
     (v) => `
     <article class="vehicle-card" data-reveal>
       <div class="vehicle-card__media">
-        <img src="${v.image}" alt="${v.title}" loading="lazy" />
+        <img src="${v.image}" alt="${v.title} en venta en Iconic Broker Monterrey" loading="lazy" decoding="async" />
         <span class="vehicle-card__badge">${v.price_label}</span>
       </div>
       <div class="vehicle-card__body">

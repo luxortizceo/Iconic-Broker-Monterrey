@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Iconic Broker Monterrey</title>
 <meta name="description" content="Iconic Broker — compra, venta y consignación de autos exóticos y de lujo en Monterrey." />
+<link rel="canonical" href="https://iconicbrokermonterrey.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Iconic Broker Monterrey" />
+<meta property="og:description" content="Compra, venta y consignación de autos exóticos y de lujo en Monterrey. Inventario curado, trato directo." />
+<meta property="og:image" content="assets/img/hero-poster.jpg" />
+<meta property="og:locale" content="es_MX" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#0a0a0a" />
 <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
@@ -15,10 +23,23 @@
     <a href="#inventario" class="hide-mobile">Inventario</a>
     <a href="#vender" class="hide-mobile">Vende/Consigna</a>
     <a href="#showroom" class="hide-mobile">Showroom</a>
-    <a href="#contacto">Contacto</a>
+    <a href="#ubicacion" class="hide-mobile">Ubicación</a>
+    <a href="#contacto" class="hide-mobile">Contacto</a>
   </nav>
-  <a class="cta" href="#contacto">Contactar</a>
+  <a class="cta hide-mobile" href="#contacto">Contactar</a>
+  <button class="nav-toggle" data-nav-toggle aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+
+<nav class="mobile-menu" data-mobile-menu aria-hidden="true">
+  <a href="#inventario" data-mobile-link>Inventario</a>
+  <a href="#vender" data-mobile-link>Vende/Consigna</a>
+  <a href="#showroom" data-mobile-link>Showroom</a>
+  <a href="#ubicacion" data-mobile-link>Ubicación</a>
+  <a href="#contacto" data-mobile-link>Contacto</a>
+  <a class="cta cta--solid" href="#contacto" data-mobile-link>Contactar</a>
+</nav>
 
 <section class="hero-scroller" data-hero-scroller>
   <div class="hero-sticky">
@@ -191,6 +212,42 @@
   </div>
 </section>
 
+<section class="location" id="ubicacion" data-reveal-stagger>
+  <div class="location__info" data-reveal>
+    <div class="eyebrow">Visítanos</div>
+    <h2 data-split-text>Monterrey · Punto Valle</h2>
+    <p class="location__address">Río Missouri 555, Piso G · Del Valle, 66220 San Pedro Garza García, N.L.</p>
+
+    <dl class="location__hours">
+      <div><dt>Lunes – Viernes</dt><dd>9:00 a.m. – 7:00 p.m.</dd></div>
+      <div><dt>Sábado</dt><dd>9:00 a.m. – 3:00 p.m.</dd></div>
+      <div><dt>Domingo</dt><dd>Cerrado</dd></div>
+    </dl>
+
+    <a
+      class="cta"
+      href="https://www.google.com/maps/dir/?api=1&destination=25.6591939,-100.3559116"
+      target="_blank"
+      rel="noopener"
+    >Cómo llegar</a>
+
+    <div class="location__other">
+      <span>Red Iconic Broker:</span>
+      <div><strong>CDMX</strong> · Santa Fe · 55 3468 7609</div>
+      <div><strong>Guadalajara</strong> · Providencia · 33 1984 5664</div>
+    </div>
+  </div>
+
+  <div class="location__map">
+    <iframe
+      src="https://maps.google.com/maps?q=25.6591939,-100.3559116&z=16&output=embed"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Ubicación de Iconic Broker Monterrey en el mapa"
+    ></iframe>
+  </div>
+</section>
+
 <section class="contact" id="contacto" data-reveal>
   <div class="inner">
     <div class="eyebrow">Hablemos</div>
@@ -216,7 +273,8 @@
 
 <footer class="site-footer">
   <div class="wordmark">Iconic<span>Broker</span></div>
-  <p>Monterrey, N.L. · © <span data-year></span> Iconic Broker. Todos los derechos reservados.</p>
+  <p>Río Missouri 555, Punto Valle · San Pedro Garza García, N.L. · 81 2202 7000</p>
+  <p>© <span data-year></span> Iconic Broker. Todos los derechos reservados.</p>
 </footer>
 
 <script src="assets/js/inventory-data.js"></script>
