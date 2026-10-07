@@ -4,17 +4,40 @@
 
   grid.innerHTML = window.ICONIC_INVENTORY.map(
     (v) => `
-    <article class="vehicle-card" data-reveal>
+    <article class="vehicle-card" data-reveal data-vehicle-card data-type="${v.type || ""}" data-title="${v.title}" tabindex="0" role="button" aria-label="Preguntar por ${v.title} en WhatsApp">
       <div class="vehicle-card__media">
         <img src="${v.image}" alt="${v.title} en venta en Iconic Broker Monterrey" loading="lazy" decoding="async" />
         <span class="vehicle-card__badge">${v.price_label}</span>
       </div>
       <div class="vehicle-card__body">
         <h3>${v.title}</h3>
+        ${v.specs ? `<span class="vehicle-card__specs">${v.specs}</span>` : ""}
         <p>${v.description}</p>
-        <span class="vehicle-card__price">${v.price_label}</span>
+        <span class="vehicle-card__footer">
+          <span class="vehicle-card__price">${v.price_label}</span>
+          <span class="vehicle-card__cta">Preguntar →</span>
+        </span>
       </div>
     </article>
+  `
+  ).join("");
+})();
+
+(function renderFaq() {
+  const list = document.querySelector("[data-faq-list]");
+  if (!list || !window.ICONIC_FAQ) return;
+
+  list.innerHTML = window.ICONIC_FAQ.map(
+    (item, i) => `
+    <div class="faq-item" data-faq-item>
+      <button class="faq-item__q" data-faq-toggle aria-expanded="false" aria-controls="faq-a-${i}">
+        <span>${item.q}</span>
+        <span class="faq-item__icon" aria-hidden="true">+</span>
+      </button>
+      <div class="faq-item__a" id="faq-a-${i}">
+        <p>${item.a}</p>
+      </div>
+    </div>
   `
   ).join("");
 })();

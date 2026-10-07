@@ -3,6 +3,8 @@
   --paper: #f5f3ee;
   --gold: #c9a24b;
   --gold-soft: rgba(201, 162, 75, 0.35);
+  --font-display: "Syne", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -12,8 +14,51 @@ html, body {
   padding: 0;
   background: var(--ink);
   color: var(--paper);
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   scroll-behavior: auto;
+}
+
+h1, h2, h3,
+.wordmark,
+.stats__num,
+.vehicle-card__body h3,
+.process__step h3 {
+  font-family: var(--font-display);
+}
+
+/* ---------- Scroll progress ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--gold);
+  z-index: 70;
+  transition: width 0.1s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { transition: none; }
+}
+
+/* ---------- Brand mark (nav logo) ---------- */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  mix-blend-mode: normal;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(6px);
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  line-height: 0;
+}
+
+.brand-mark img {
+  display: block;
+  height: 2.1rem;
+  width: auto;
+  border-radius: 0.2rem;
 }
 
 /* ---------- Nav ---------- */
@@ -460,6 +505,34 @@ button.cta:hover {
   margin: 0;
 }
 
+.inventory-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 88rem;
+  margin: 0 auto 2.5rem;
+}
+
+.inventory-filters button {
+  background: transparent;
+  border: 1px solid rgba(245, 243, 238, 0.18);
+  color: rgba(245, 243, 238, 0.65);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+  font-family: inherit;
+}
+
+.inventory-filters button.is-active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201, 162, 75, 0.08);
+}
+
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
@@ -473,9 +546,18 @@ button.cta:hover {
   border: 1px solid rgba(245, 243, 238, 0.08);
   background: #111;
   overflow: hidden;
-  cursor: default;
+  cursor: pointer;
   transition: border-color 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.5s ease;
+}
+
+.vehicle-card.is-hidden {
+  display: none;
+}
+
+.vehicle-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
 }
 
 .vehicle-card:hover {
@@ -497,12 +579,12 @@ button.cta:hover {
   display: block;
   transform: scale(1.04);
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
-  filter: saturate(0.92);
+  filter: saturate(0.88) contrast(1.05) brightness(0.98);
 }
 
 .vehicle-card:hover .vehicle-card__media img {
   transform: scale(1.12);
-  filter: saturate(1.05);
+  filter: saturate(1) contrast(1.05) brightness(1.02);
 }
 
 .vehicle-card__badge {
@@ -530,6 +612,15 @@ button.cta:hover {
   letter-spacing: 0.01em;
 }
 
+.vehicle-card__specs {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: rgba(245, 243, 238, 0.45);
+  margin: 0 0 0.75rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
 .vehicle-card__body p {
   font-size: 0.88rem;
   line-height: 1.55;
@@ -537,11 +628,29 @@ button.cta:hover {
   margin: 0 0 1rem;
 }
 
+.vehicle-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .vehicle-card__price {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   color: var(--gold);
   font-weight: 600;
+}
+
+.vehicle-card__cta {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: rgba(245, 243, 238, 0.45);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.vehicle-card:hover .vehicle-card__cta {
+  color: var(--gold);
+  transform: translateX(3px);
 }
 
 /* ---------- Exit scroller (showroom video) ---------- */
@@ -1067,6 +1176,84 @@ button.cta:hover {
   margin: 0;
 }
 
+/* ---------- FAQ ---------- */
+.faq {
+  background: var(--ink);
+  padding: clamp(5rem, 10vw, 7rem) clamp(1.25rem, 5vw, 4rem);
+}
+
+.faq__head {
+  max-width: 38rem;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.faq__head .eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.1rem;
+}
+
+.faq__head h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 600;
+  margin: 0;
+}
+
+.faq__list {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(245, 243, 238, 0.1);
+}
+
+.faq-item__q {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--paper);
+  text-align: left;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 1.3rem 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.faq-item__icon {
+  color: var(--gold);
+  font-size: 1.3rem;
+  font-weight: 300;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faq-item__q[aria-expanded="true"] .faq-item__icon {
+  transform: rotate(45deg);
+}
+
+.faq-item__a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.faq-item__a p {
+  margin: 0 0 1.3rem;
+  color: rgba(245, 243, 238, 0.6);
+  line-height: 1.6;
+  font-size: 0.92rem;
+  max-width: 38rem;
+}
+
 /* ---------- Sell / consign form ---------- */
 .sell {
   background: #0d0d0d;
@@ -1180,6 +1367,23 @@ button.cta:hover {
   text-transform: uppercase;
   padding: 1rem;
   cursor: pointer;
+}
+
+.sell__confirmation {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  text-align: center;
+  color: var(--gold);
+  font-size: 0.85rem;
+  margin: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+}
+
+.sell__confirmation.is-visible {
+  max-height: 3rem;
+  opacity: 1;
+  margin-top: 1.2rem;
 }
 
 @media (max-width: 640px) {

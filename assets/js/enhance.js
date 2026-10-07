@@ -142,6 +142,18 @@
       lines.join("\n")
     )}`;
     window.open(url, "_blank", "noopener");
+
+    const confirmation = form.querySelector("[data-sell-confirmation]");
+    if (confirmation) {
+      confirmation.classList.add("is-visible");
+      form.reset();
+      toggle &&
+        toggle.querySelectorAll("[data-sell-mode]").forEach((b, i) => {
+          b.classList.toggle("is-active", i === 0);
+        });
+      mode = "Venta directa";
+      setTimeout(() => confirmation.classList.remove("is-visible"), 6000);
+    }
   });
 })();
 
@@ -189,4 +201,104 @@
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+})();
+
+(function scrollProgress() {
+  const bar = document.querySelector("[data-scroll-progress]");
+  if (!bar) return;
+
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    bar.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    },
+    { passive: true }
+  );
+  window.addEventListener("resize", update);
+  update();
+})();
+
+(function inventoryFilters() {
+  const bar = document.querySelector("[data-inventory-filters]");
+  const grid = document.querySelector("[data-inventory-grid]");
+  if (!bar || !grid || !window.ICONIC_FILTERS) return;
+
+  bar.innerHTML = window.ICONIC_FILTERS.map(
+    (f, i) =>
+      `<button type="button" class="${i === 0 ? "is-active" : ""}" data-filter-key="${f.key}">${f.label}</button>`
+  ).join("");
+
+  bar.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      bar.querySelectorAll("button").forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      const key = btn.getAttribute("data-filter-key");
+
+      grid.querySelectorAll("[data-vehicle-card]").forEach((card) => {
+        const matches = key === "todos" || card.getAttribute("data-type") === key;
+        card.classList.toggle("is-hidden", !matches);
+      });
+    });
+  });
+})();
+
+(function faqAccordion() {
+  const list = document.querySelector("[data-faq-list]");
+  if (!list) return;
+
+  list.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-faq-toggle]");
+    if (!btn) return;
+
+    const item = btn.closest("[data-faq-item]");
+    const answer = item.querySelector(".faq-item__a");
+    const isOpen = btn.getAttribute("aria-expanded") === "true";
+
+    list.querySelectorAll("[data-faq-toggle]").forEach((other) => {
+      if (other !== btn) {
+        other.setAttribute("aria-expanded", "false");
+        other.closest("[data-faq-item]").querySelector(".faq-item__a").style.maxHeight = "";
+      }
+    });
+
+    btn.setAttribute("aria-expanded", String(!isOpen));
+    answer.style.maxHeight = isOpen ? "" : `${answer.scrollHeight}px`;
+  });
+})();
+
+(function vehicleCardClick() {
+  const grid = document.querySelector("[data-inventory-grid]");
+  if (!grid || !window.ICONIC_CONTACT) return;
+
+  const inquire = (card) => {
+    const title = card.getAttribute("data-title");
+    const message = `Hola, vi el ${title} en el sitio y me interesa. ¿Me pueden dar más información?`;
+    const url = `https://wa.me/${window.ICONIC_CONTACT.whatsapp}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank", "noopener");
+  };
+
+  grid.addEventListener("click", (e) => {
+    const card = e.target.closest("[data-vehicle-card]");
+    if (card) inquire(card);
+  });
+
+  grid.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const card = e.target.closest("[data-vehicle-card]");
+    if (card) {
+      e.preventDefault();
+      inquire(card);
+    }
+  });
 })();
