@@ -74,57 +74,7 @@
   if (el) el.textContent = new Date().getFullYear();
 })();
 
-(function scrollReveal() {
-  const targets = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
-  if (!targets.length) return;
-
-  if (!("IntersectionObserver" in window)) {
-    targets.forEach((el) => el.classList.add("is-visible"));
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
-  );
-
-  targets.forEach((el) => observer.observe(el));
-})();
-
-(function exitScroller() {
-  const scroller = document.querySelector("[data-exit-scroller]");
-  const sticky = scroller ? scroller.querySelector(".exit-sticky") : null;
-  const video = document.querySelector("[data-exit-video]");
-  if (!scroller || !sticky || !video) return;
-
-  const openObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) sticky.classList.add("is-open");
-      });
-    },
-    { threshold: 0.2 }
-  );
-  openObserver.observe(scroller);
-
-  const playObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      });
-    },
-    { threshold: 0.35 }
-  );
-  playObserver.observe(sticky);
-})();
+// Scroll reveals, the hero/exit scrubs, kinetic headings, card tilt and
+// magnetic buttons all live in assets/js/motion.js (GSAP + ScrollTrigger) —
+// kept separate from this file so rendering/data logic and the motion
+// engine never fight over the same DOM nodes.
