@@ -101,9 +101,33 @@
     }
 
     var videoDuration = 0;
+    var videoPrimed = false;
     video.addEventListener("loadedmetadata", function () {
       videoDuration = video.duration || 0;
     });
+
+    // Mobile browsers (iOS Safari especially) won't decode/paint a frame
+    // from a plain currentTime seek until the video has actually been
+    // played at least once. Kick off a silent play+pause to "prime" the
+    // decoder, then hand full control back to the scroll scrub below.
+    function primeVideo() {
+      if (videoPrimed) return;
+      var playPromise = video.play();
+      if (playPromise && typeof playPromise.then === "function") {
+        playPromise
+          .then(function () {
+            video.pause();
+            videoPrimed = true;
+          })
+          .catch(function () {});
+      } else {
+        video.pause();
+        videoPrimed = true;
+      }
+    }
+    primeVideo();
+    video.addEventListener("loadeddata", primeVideo);
+    document.addEventListener("touchstart", primeVideo, { once: true, passive: true });
 
     var proxy = { p: 0 };
     gsap
@@ -121,6 +145,7 @@
         onUpdate: function () {
           var progress = proxy.p;
           if (videoDuration > 0 && !video.seeking) {
+            if (!videoPrimed) primeVideo();
             video.currentTime = progress * videoDuration;
           }
           if (copy) {
