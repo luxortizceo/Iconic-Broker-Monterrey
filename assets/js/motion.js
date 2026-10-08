@@ -342,6 +342,76 @@
     );
   }
 
+  /* ---------- 10. Film grain (whole page) ---------- */
+  function initGrain() {
+    if (reduceMotion) return;
+
+    var size = 128;
+    var canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    var ctx = canvas.getContext("2d");
+    var imageData = ctx.createImageData(size, size);
+    for (var i = 0; i < imageData.data.length; i += 4) {
+      var v = Math.random() * 255;
+      imageData.data[i] = v;
+      imageData.data[i + 1] = v;
+      imageData.data[i + 2] = v;
+      imageData.data[i + 3] = 255;
+    }
+    ctx.putImageData(imageData, 0, 0);
+
+    var grain = document.createElement("div");
+    grain.className = "noddo-grain";
+    grain.style.backgroundImage = "url(" + canvas.toDataURL() + ")";
+    document.body.appendChild(grain);
+
+    var positions = [
+      "0% 0%", "10% -5%", "-5% 10%", "5% 5%", "-10% 0%", "0% -10%", "8% 8%", "-8% -8%",
+    ];
+    var i2 = 0;
+    setInterval(function () {
+      i2 = (i2 + 1) % positions.length;
+      grain.style.backgroundPosition = positions[i2];
+    }, 90);
+  }
+
+  /* ---------- 11. Ambient gold particles ---------- */
+  function initParticles() {
+    if (reduceMotion) return;
+
+    document.querySelectorAll("[data-ambient]").forEach(function (section) {
+      var count = window.innerWidth < 720 ? 4 : 8;
+      for (var i = 0; i < count; i++) {
+        var dot = document.createElement("div");
+        dot.className = "noddo-particle";
+        var size = 3 + Math.random() * 5;
+        dot.style.width = size + "px";
+        dot.style.height = size + "px";
+        dot.style.left = Math.random() * 100 + "%";
+        dot.style.top = Math.random() * 100 + "%";
+        section.appendChild(dot);
+
+        gsap.set(dot, { opacity: 0 });
+        gsap.to(dot, {
+          opacity: 0.25 + Math.random() * 0.35,
+          duration: 2 + Math.random() * 2,
+          delay: Math.random() * 2,
+          ease: "sine.inOut",
+        });
+        gsap.to(dot, {
+          y: "-=" + (40 + Math.random() * 60),
+          x: "+=" + (Math.random() * 40 - 20),
+          duration: 10 + Math.random() * 10,
+          delay: Math.random() * 3,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+        });
+      }
+    });
+  }
+
   initReveals();
   initSplitText();
   initHero();
@@ -351,6 +421,8 @@
   initMagneticButtons();
   initCursorDot();
   initParallax();
+  initGrain();
+  initParticles();
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
